@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shiguiwu.admin.mapper.SysUserMapper">
+
   <resultMap id="BaseResultMap" type="com.shiguiwu.admin.entity.SysUser">
     <!--@mbg.generated-->
     <!--@Table sys_user-->
-    <id column="id" jdbcType="INTEGER" property="id" />
+
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />
@@ -15,8 +16,8 @@
     <result column="birthday" jdbcType="DATE" property="birthday" />
     <result column="sex" jdbcType="BOOLEAN" property="sex" />
     <result column="status" jdbcType="BOOLEAN" property="status" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
@@ -45,7 +46,7 @@
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
       #{headimgurl,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
       #{email,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, #{sex,jdbcType=BOOLEAN}, 
-      #{status,jdbcType=BOOLEAN}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
+      #{status,jdbcType=BOOLEAN}, now(), now()
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.shiguiwu.admin.entity.SysUser" useGeneratedKeys="true">
@@ -82,10 +83,10 @@
       <if test="status != null">
         `status`,
       </if>
-      <if test="createtime != null">
+      <if test="createTime != null">
         createTime,
       </if>
-      <if test="updatetime != null">
+      <if test="updateTime != null">
         updateTime,
       </if>
     </trim>
@@ -120,11 +121,11 @@
       <if test="status != null">
         #{status,jdbcType=BOOLEAN},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -162,11 +163,11 @@
       <if test="status != null">
         `status` = #{status,jdbcType=BOOLEAN},
       </if>
-      <if test="createtime != null">
-        createTime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -184,12 +185,12 @@
       birthday = #{birthday,jdbcType=DATE},
       sex = #{sex,jdbcType=BOOLEAN},
       `status` = #{status,jdbcType=BOOLEAN},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
   <select id="queryByPage"  parameterType="com.shiguiwu.admin.entity.SysUser" resultType="com.shiguiwu.admin.entity.SysUser">
-    select * from sys_user limit 0,10
+    select * from sys_user
   </select>
 </mapper>

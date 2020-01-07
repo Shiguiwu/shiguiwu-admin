@@ -26,6 +26,8 @@ public abstract class BaseEntity<ID extends Serializable> implements Serializabl
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
 

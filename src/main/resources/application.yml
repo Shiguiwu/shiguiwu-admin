@@ -8,11 +8,21 @@ spring:
   profiles:
     active: dev
 
+  thymeleaf:
+    cache: false
+
   datasource:
     url: jdbc:mysql://127.0.0.1/rbac?seUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     password: 123456
     username: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+
 
 mybatis:
   type-aliases-package: com.shiguiwu.admin.entity
