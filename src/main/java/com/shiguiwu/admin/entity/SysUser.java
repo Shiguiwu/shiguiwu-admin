@@ -40,9 +40,9 @@ public class SysUser extends BaseEntity<Long> {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
-    private Boolean sex;
+    private Byte sex;
 
-    private Boolean status;
+    private Byte status;
 
 
 }

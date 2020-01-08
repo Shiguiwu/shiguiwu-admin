@@ -14,8 +14,8 @@
     <result column="telephone" jdbcType="VARCHAR" property="telephone" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="birthday" jdbcType="DATE" property="birthday" />
-    <result column="sex" jdbcType="BOOLEAN" property="sex" />
-    <result column="status" jdbcType="BOOLEAN" property="status" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="status" jdbcType="TINYINT" property="status" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -190,7 +190,20 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="queryByPage"  parameterType="com.shiguiwu.admin.entity.SysUser" resultType="com.shiguiwu.admin.entity.SysUser">
-    select * from sys_user
+  <select id="queryByPage"  parameterType="com.shiguiwu.admin.dto.UserDto" resultType="com.shiguiwu.admin.entity.SysUser">
+    select * from sys_user where 1=1
+
+    <if test="  username != null and username != ''">
+      and username = #{username,jdbcType=VARCHAR}
+    </if>
+
+  </select>
+
+    <select id="findAll"  parameterType="com.shiguiwu.admin.dto.UserDto" resultType="com.shiguiwu.admin.entity.SysUser">
+    select * from sys_user where 1=1
+
+    <if test="  username != null and username != ''">
+      and username = #{username,jdbcType=VARCHAR}
+    </if>
   </select>
 </mapper>

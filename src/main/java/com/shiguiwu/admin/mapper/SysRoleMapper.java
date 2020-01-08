@@ -1,6 +1,9 @@
 package com.shiguiwu.admin.mapper;
 
+import com.shiguiwu.admin.dto.RoleDto;
 import com.shiguiwu.admin.entity.SysRole;
+
+import java.util.List;
 
 /**
  * 
@@ -28,4 +31,8 @@ public interface SysRoleMapper {
     int updateByPrimaryKeySelective(SysRole record);
 
     int updateByPrimaryKey(SysRole record);
+
+    List<SysRole> queryAllRole();
+
+    List<SysRole> findAll(RoleDto roleDto);
 }

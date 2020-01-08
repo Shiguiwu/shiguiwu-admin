@@ -21,7 +21,7 @@ spring:
   devtools:
     restart:
       enabled: true
-      additional-paths: src/main/java
+      additional-paths: src/main/java,resources/**,static/**,templates/**
 
 
 mybatis:
@@ -32,3 +32,8 @@ mybatis:
   # cache-enabled: true
 
 api-url: /api
+
+
+logging:
+  level:
+    com.shiguiwu.admin.mapper: debug

@@ -1,7 +1,11 @@
 package com.shiguiwu.admin.service;
 
+import com.shiguiwu.admin.dto.RoleDto;
 import com.shiguiwu.admin.entity.SysRole;
-    /**
+
+import java.util.List;
+
+/**
  * 
  * @description: ${DESC}
  *
@@ -15,7 +19,7 @@ import com.shiguiwu.admin.entity.SysRole;
  *
  *
  */
-public interface SysRoleService{
+public interface SysRoleService {
 
 
     int deleteByPrimaryKey(Integer id);
@@ -30,4 +34,7 @@ public interface SysRoleService{
 
     int updateByPrimaryKey(SysRole record);
 
+    List<SysRole> getAllRole();
+
+    List<SysRole> findAll(RoleDto roleDto);
 }

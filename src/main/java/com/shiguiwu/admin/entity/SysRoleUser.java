@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 /**
  * @description: ${DESC}
  * @author: stone
@@ -20,7 +22,7 @@ public class SysRoleUser {
 
 
     private static final long serialVersionUID = -7114694363942346075L;
-    private Integer userid;
+    private Long userid;
 
     private Integer roleid;
 }

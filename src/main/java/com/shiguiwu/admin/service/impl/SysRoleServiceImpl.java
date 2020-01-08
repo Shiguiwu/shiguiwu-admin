@@ -1,10 +1,14 @@
 package com.shiguiwu.admin.service.impl;
 
+import com.shiguiwu.admin.dto.RoleDto;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.shiguiwu.admin.entity.SysRole;
 import com.shiguiwu.admin.mapper.SysRoleMapper;
 import com.shiguiwu.admin.service.SysRoleService;
+
+import java.util.List;
+
 /**
  * 
  * @description: ${DESC}
@@ -53,6 +57,16 @@ public class SysRoleServiceImpl implements SysRoleService{
     @Override
     public int updateByPrimaryKey(SysRole record) {
         return sysRoleMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
+    public List<SysRole> getAllRole() {
+        return sysRoleMapper.queryAllRole();
+    }
+
+    @Override
+    public List<SysRole> findAll(RoleDto roleDto) {
+        return sysRoleMapper.findAll(roleDto);
     }
 
 }

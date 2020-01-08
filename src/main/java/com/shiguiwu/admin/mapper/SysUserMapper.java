@@ -1,5 +1,6 @@
 package com.shiguiwu.admin.mapper;
 
+import com.shiguiwu.admin.dto.UserDto;
 import com.shiguiwu.admin.entity.SysUser;
 
 import java.util.List;
@@ -31,5 +32,7 @@ public interface SysUserMapper {
 
     int updateByPrimaryKey(SysUser record);
 
-    List<SysUser> queryByPage(SysUser record);
+    List<SysUser> queryByPage(UserDto record);
+
+    List<SysUser> findAll(UserDto record);
 }

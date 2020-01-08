@@ -1,5 +1,6 @@
 package com.shiguiwu.admin.service;
 
+import com.shiguiwu.admin.dto.UserDto;
 import com.shiguiwu.admin.entity.SysUser;
 
 import java.util.List;
@@ -33,6 +34,10 @@ public interface SysUserService{
 
     int updateByPrimaryKey(SysUser record);
 
-    List<SysUser> queryByPage(SysUser record);
+    List<SysUser> queryByPage(UserDto record);
+
+    List<SysUser> findAll(UserDto record);
+
+    int addUser(UserDto dto);
 
 }
