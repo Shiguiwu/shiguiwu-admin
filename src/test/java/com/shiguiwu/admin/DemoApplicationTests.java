@@ -37,7 +37,7 @@ public class DemoApplicationTests {
     @Test
     public void queryOne() {
 
-        SysUser sysUser = sysUserMapper.selectByPrimaryKey(45);
+        SysUser sysUser = sysUserMapper.selectByPrimaryKey(45L);
 
         System.out.println(sysUser.getId());
     }

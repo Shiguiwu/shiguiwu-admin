@@ -2,6 +2,7 @@ package com.shiguiwu.admin.mapper;
 
 import com.shiguiwu.admin.dto.UserDto;
 import com.shiguiwu.admin.entity.SysUser;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,13 +21,13 @@ import java.util.List;
  *
  */
 public interface SysUserMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(SysUser record);
 
     int insertSelective(SysUser record);
 
-    SysUser selectByPrimaryKey(Integer id);
+    SysUser selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(SysUser record);
 
@@ -35,4 +36,6 @@ public interface SysUserMapper {
     List<SysUser> queryByPage(UserDto record);
 
     List<SysUser> findAll(UserDto record);
+
+    UserDto queryDto(@Param("id") Long id);
 }

@@ -41,7 +41,7 @@ public class SysUserServiceImpl implements SysUserService{
     private SysRoleUserMapper sysRoleUserMapper;
 
     @Override
-    public int deleteByPrimaryKey(Integer id) {
+    public int deleteByPrimaryKey(Long id) {
         return sysUserMapper.deleteByPrimaryKey(id);
     }
 
@@ -57,7 +57,7 @@ public class SysUserServiceImpl implements SysUserService{
     }
 
     @Override
-    public SysUser selectByPrimaryKey(Integer id) {
+    public SysUser selectByPrimaryKey(Long id) {
         return sysUserMapper.selectByPrimaryKey(id);
     }
 
@@ -87,7 +87,6 @@ public class SysUserServiceImpl implements SysUserService{
     public int addUser(UserDto dto) {
         SysUser sysUser = new SysUser();
         BeanUtil.copyPropertiesIgnoreNull(dto, sysUser);
-        sysUser.setBirthday(DateUtils.parseStrToDate(dto.getBirthday(), "yyyy-MM-dd"));
         sysUser.setStatus((byte) 1);
 
         int result = sysUserMapper.insert(sysUser);
@@ -96,6 +95,28 @@ public class SysUserServiceImpl implements SysUserService{
         roleUser.setUserid(sysUser.getId());
         sysRoleUserMapper.insert(roleUser);
         return result;
+    }
+
+    @Override
+    public UserDto queryDto(Long id) {
+        return sysUserMapper.queryDto(id);
+    }
+
+    @Override
+    @Transactional
+    public int updateUserInfo(UserDto dto) {
+        SysUser sysUser = new SysUser();
+        BeanUtil.copyPropertiesIgnoreNull(dto, sysUser);
+        sysUser.setUpdateTime(new Date());
+        //删除原有的角色
+        sysRoleUserMapper.deleteByUserId(dto.getId());
+
+        //重新插入角色
+        SysRoleUser roleUser = new SysRoleUser();
+        roleUser.setRoleid(Integer.parseInt(dto.getRoleId()));
+        roleUser.setUserid(sysUser.getId());
+        sysRoleUserMapper.insert(roleUser);
+        return sysUserMapper.updateByPrimaryKeySelective(sysUser);
     }
 
 }

@@ -3,52 +3,31 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>新增用户信息</title>
+    <title>修改用户信息</title>
     <header th:replace="header::html"></header>
 </head>
 
 <body>
 <div class="x-body">
     <form class="layui-form">
-
+        <!--/*@thymesVar id="sysUser" type=""*/-->
+        <input type="hidden" id="userId" name="id" th:value="${sysUser.id}">
+        <!--        用户名 start-->
         <div class="layui-form-item">
             <label for="L_username" class="layui-form-label">
                 <span class="x-red">*</span>用户名
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="L_username" th:value="${sysUser.username}" name="username" lay-verify="required" autocomplete="off" class="layui-input">
+                <input type="text" id="L_username" th:value="${sysUser.username}" name="username" required="" lay-verify="username" autocomplete="off" class="layui-input">
             </div>
             <div class="layui-form-mid layui-word-aux">
                 <span class="x-red">*</span>将会成为您唯一的登入名
             </div>
         </div>
-        <div class="layui-form-item">
-            <label for="L_pass" class="layui-form-label">
-                <span class="x-red">*</span>密码
-            </label>
-            <div class="layui-input-inline">
-                <input type="password" id="L_pass" th:value="${sysUser.password}" name="password" lay-verify="pass" autocomplete="off" class="layui-input">
-            </div>
-            <div class="layui-form-mid layui-word-aux">
-                6到16个字符
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_repass" class="layui-form-label">
-                <span class="x-red">*</span>确认密码
-            </label>
-            <div class="layui-input-inline">
-                <input type="password" id="L_repass" name="repass" required="" lay-verify="repass" autocomplete="off" class="layui-input">
-            </div>
-        </div>
 
-        <div class="layui-form-item">
-            <label for="L_email" class="layui-form-label">生日</label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_birthday"  th:value="${sysUser.birthday}" name='birthday' placeholder="yyyy-MM-dd" class="layui-input ">
-            </div>
-        </div>
+        <!--        用户名 end-->
 
+        <!--    昵称 start   -->
         <div class="layui-form-item">
             <label for="L_nickname" class="layui-form-label">
                 <span class="x-red">*</span>昵称
@@ -57,6 +36,19 @@
                 <input type="text" id="L_nickname" th:value="${sysUser.nickname}" name="nickname" required="" lay-verify="nickname" autocomplete="off" class="layui-input">
             </div>
         </div>
+        <!--    昵称 end   -->
+
+        <!--    生日 start -->
+        <div class="layui-form-item">
+            <label for="L_email" class="layui-form-label">生日</label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_birthday"  th:value="${#dates.format(sysUser.birthday, 'yyyy-MM-dd')}"  name='birthday' lay-verify="date" placeholder="yyyy-MM-dd" class="layui-input">
+            </div>
+        </div>
+        <!--    昵称 end   -->
+
+
+        <!--    手机号码 start   -->
         <div class="layui-form-item">
             <label for="L_telephone" class="layui-form-label">
                 <span class="x-red">*</span>手机
@@ -68,6 +60,9 @@
                 11位数字
             </div>
         </div>
+        <!--    手机号码 end   -->
+
+        <!--    邮件 start   -->
         <div class="layui-form-item">
             <label for="L_email" class="layui-form-label">
                 <span class="x-red">*</span>邮件
@@ -76,15 +71,20 @@
                 <input type="text" id="L_email" th:value="${sysUser.email}" name="email" required="" lay-verify="email" autocomplete="off" class="layui-input">
             </div>
         </div>
+        <!--    邮件 end   -->
 
+        <!--    性别 start   -->
         <div class="layui-form-item">
             <label class="layui-form-label">性别</label>
             <div class="layui-input-block">
-                <input type="radio"  name="sex" value="1" title="男" checked>
-                <input type="radio"  name="sex" value="0" title="女">
+                <input type="radio" th:value="${sysUser.sex}" name="sex" value="1" title="男">
+                <input type="radio" th:value="${sysUser.sex}" name="sex" value="0" title="女" >
             </div>
         </div>
-        <input type="text" id="roleId"  name="roleId" style="display:none;"/>
+        <!--    性别end   -->
+
+        <!--    角色 start   -->
+        <input type="text" id="roleId" th:value="${sysUser.roleId}" name="roleId" style="display:none;"/>
         <div class="layui-form-item">
             <label class="layui-form-label">角色</label>
             <div class="layui-input-block show-role-container">
@@ -93,21 +93,28 @@
         <div class="layui-form-item">
             <label for="L_email" class="layui-form-label">
             </label>
-            <button  class="layui-btn" lay-filter="add" lay-submit="">
-                增加
+            <button  class="layui-btn" lay-filter="edit" lay-submit="">
+                更新
             </button>
         </div>
     </form>
 </div>
 <script>
-
     layui.use(['form','layer', 'laydate'], function(){
         $ = layui.jquery;
         var form = layui.form
             ,layer = layui.layer
             ,laydate = layui.laydate;
         getAllRole(function(){
-            layui.form.render('radio')
+           var sex =  $("input[name=sex][title='男']");
+           if(sex.val() == 0) {
+               $("input[name=sex][title='女']").attr("checked","checked");
+           }else {
+               $("input[name=sex][title='男']").attr("checked","checked");
+           }
+
+
+            form.render('radio')
         });
         //日期
         laydate.render({
@@ -123,16 +130,15 @@
                 }
             }
             ,telephone: [/(.+){6,12}$/, '电话号码必须6到12位']
-            ,pass: [/(.+){6,12}$/, '密码必须6到12位']
-            ,repass: function(value){
-                if($('#L_pass').val()!=$('#L_repass').val()){
-                    return '两次密码不一致';
+            ,email: function(value){
+                if($('#email').val()!=$('#email').val()){
+                    return '邮箱不正确';
                 }
             }
         });
 
         //监听提交
-        form.on('submit(add)', function(data){
+        form.on('submit(edit)', function(data){
             var rolelRadio = $("[name=roleId]:checked");
             if(rolelRadio == undefined || rolelRadio.length <= 0){
                 layer.alert("请给该用户设置角色");
@@ -140,8 +146,8 @@
             }
             data.field.roleId = rolelRadio.val();
             $.ajax({
-                url:"/user/add",
-                type:"POST",
+                url:"/user/edit",
+                type:"PUT",
                 data: JSON.stringify(data.field),
                 dataType:'json',
                 headers:{'Content-Type':'application/json;charset=utf8'},
@@ -156,27 +162,67 @@
                             xadmin.father_reload();
                         });
                     }
+
                 }
             });
             return false;
         });
-
-
     });
+
     function getAllRole(callback){
+
+
+
         $.ajax({
             url:"/role/getAllRole",
             type:"GET",
             dataType:'json',
             success:function(result){
                 var html = "";
+                var roleId = $('#roleId').val();
+                console.log('roleid',roleId)
                 if(result.data && result.data.length > 0){
                     for(i in result.data ){
-                        html += '<input type="radio"  name="roleId" value="'+result.data[i].id+'" title="'+result.data[i].name+'" >' +
-                            '<div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>'+result.data[i].name+'</div></div>';
+                        if(roleId == result.data[i].id) {
+                            html += '<input type="radio"  name="roleId" value="' + result.data[i].id + '" title="' + result.data[i].name + '" checked>' +
+                                '<div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>' + result.data[i].name + '</div></div>';
+                        } else {
+                            html += '<input type="radio"  name="roleId" value="' + result.data[i].id + '" title="' + result.data[i].name + '" >' +
+                                '<div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>' + result.data[i].name + '</div></div>';
+
+                        }
                     }
                     $(".show-role-container").html(html);
-                    callback();
+                   callback();
+                }
+            }
+        });
+    }
+
+    function getCurrentUserRole(callback){
+        var userId = $("#userId").val();
+        $.ajax({
+            url:"/roleuser/getRoleUserByUserId",
+            type:"POST",
+            data:{
+                "userId":userId
+            },
+            dataType:'json',
+            success:function(result){
+                if(result.code == 200){
+                    if(result.data){
+                        $("[name=roleId]").each(function(){
+                            if($(this).val() == result.data.roleId){
+                                $(this).attr("checked","checked");
+                                return false;
+                            }
+                        });
+                    }
+                    if(callback){
+                        callback();
+                    }
+
+                    //callback&&callback()
                 }
             }
         });

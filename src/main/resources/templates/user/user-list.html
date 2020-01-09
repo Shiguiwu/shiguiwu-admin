@@ -38,16 +38,20 @@
                         </div>
                         <div class="layui-card-header">
                             <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                            <button class="layui-btn" onclick="xadmin.open('添加用户','/user/add',600,400)"><i class="layui-icon"></i>添加</button>
+                            <button class="layui-btn" onclick="xadmin.open('添加用户','/user/add')"><i class="layui-icon"></i>添加</button>
                         </div>
+
                         <div class="layui-card-body ">
-                            <table class="layui-table layui-form" id="user-list">
-                            </table>
+                            <table class="layui-hide" id="table" lay-filter="member"></table>
+                        </div>
+
+                        <div class="layui-card-body ">
                             <script type="text/html" id="barDemo">
-                                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-                                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                                <a class="layui-btn layui-btn-xs" lay-event="edit" permission="sys:user:edit">编辑</a>
+                                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" permission="sys:user:del">删除</a>
                             </script>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -62,7 +66,7 @@
 
           //第一个实例
           table.render({
-              elem: '#user-list'
+              elem: '#table'
               ,height: 312
               ,url: '/user/list/' //数据接口
               ,request: {
@@ -99,6 +103,43 @@
         laydate.render({
           elem: '#end' //指定元素
         });
+
+
+
+          //监听工具条
+          table.on('tool(member)', function(obj){
+              var data = obj.data;
+              if(obj.event === 'del'){
+                  layer.confirm('真的删除行么', function(index){
+
+                      $.ajax({
+                          url:"/user/delete",
+                          type:"GET",
+                          data:{id:data.id},
+                          dataType:'json',
+                          success:function(result){
+                              layer.alert("删除成功", {icon: 1},function (index1) {
+                                  layer.close(index1);
+                                  //xadmin.father_reload();
+                                  table.reload('table');
+                              });
+                          },
+                      });
+
+                  });
+              } else if(obj.event === 'edit'){
+                  xadmin.open('编辑用户信息','/user/edit/?id='+data.id);
+              }
+          });
+
+          /*用户-删除*/
+          function member_del(obj,id){
+              layer.confirm('确认要删除吗？',function(index){
+                  //发异步删除数据
+                  $(obj).parents("tr").remove();
+                  layer.msg('已删除!',{icon:1,time:1000});
+              });
+          }
       });
 
        /*用户-停用*/
@@ -125,14 +166,8 @@
           });
       }
 
-      /*用户-删除*/
-      function member_del(obj,id){
-          layer.confirm('确认要删除吗？',function(index){
-              //发异步删除数据
-              $(obj).parents("tr").remove();
-              layer.msg('已删除!',{icon:1,time:1000});
-          });
-      }
+
+
 
 
 
@@ -147,10 +182,4 @@
         });
       }
     </script>
-    <script>var _hmt = _hmt || []; (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();</script>
 </html>

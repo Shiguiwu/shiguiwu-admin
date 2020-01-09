@@ -23,4 +23,6 @@ public interface SysRoleUserMapper {
     int insert(SysRoleUser record);
 
     int insertSelective(SysRoleUser record);
+
+    void deleteByUserId(@Param("userId") Long userId);
 }

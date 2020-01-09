@@ -1,6 +1,5 @@
 package com.shiguiwu.admin.dto;
 
-import io.swagger.models.auth.In;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,13 +12,15 @@ import java.io.Serializable;
  * @pakeage: com.shiguiwu.admin.dto
  */
 @Data
-public class BaseDto implements Serializable {
+public class BaseDto<T> implements Serializable {
 
     private static final long serialVersionUID = -6891844697615928401L;
 
     private Integer pageSize = 10;
 
     private Integer pageNum = 1;
+
+    private T id;
 
 
 

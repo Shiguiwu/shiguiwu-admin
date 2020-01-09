@@ -8,17 +8,24 @@ import com.shiguiwu.admin.service.SysUserService;
 import com.shiguiwu.admin.util.Results;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,6 +40,8 @@ import java.util.List;
 @Slf4j
 public class UserController {
 
+
+    String pattern = "yyyy-MM-dd";
 
     @Autowired
     private SysUserService sysUserService;
@@ -50,14 +59,22 @@ public class UserController {
         return Results.success((int) pageInfo.getTotal(),pageInfo.getList());
     }
 
-    @PutMapping("/update")
+    @PutMapping("/edit")
     @ResponseBody
-    public Results<String> update(@RequestBody SysUser sysUser) {
-        int result = sysUserService.updateByPrimaryKeySelective(sysUser);
+    public Results<String> update(@RequestBody UserDto dto) {
+        int result = sysUserService.updateUserInfo(dto);
         if (result > 0) {
             return Results.success("修改成功");
         }
-        return Results.failure(-1,"修改失败");
+        return Results.failure(500,"修改失败");
+    }
+
+    @GetMapping("/edit")
+    public String edit(@RequestParam Long id,Model model) {
+        UserDto sysUser = sysUserService.queryDto(id);
+        model.addAttribute("sysUser",sysUser);
+
+        return "/user/user-edit";
     }
 
     @PostMapping("/add")
@@ -67,12 +84,18 @@ public class UserController {
         if (result > 0) {
             return Results.success("添加成功");
         }
-        return Results.success("添加失败");
+        return Results.failure(500,"添加失败");
     }
 
     @GetMapping("/add")
     public String addForm(Model model) {
         model.addAttribute("sysUser",new SysUser());
         return "/user/user-add";
+    }
+
+    //只需要加上下面这段即可，注意不能忘记注解
+    @InitBinder
+    public void initBinder(WebDataBinder binder, WebRequest request) {
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat(pattern), true));// CustomDateEditor为自定义日期编辑器
     }
 }

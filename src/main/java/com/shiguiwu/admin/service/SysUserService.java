@@ -22,13 +22,13 @@ import java.util.List;
 public interface SysUserService{
 
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(SysUser record);
 
     int insertSelective(SysUser record);
 
-    SysUser selectByPrimaryKey(Integer id);
+    SysUser selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(SysUser record);
 
@@ -40,4 +40,7 @@ public interface SysUserService{
 
     int addUser(UserDto dto);
 
+    UserDto queryDto(Long id);
+
+    int updateUserInfo(UserDto dto);
 }
