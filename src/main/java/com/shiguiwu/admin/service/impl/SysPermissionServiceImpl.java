@@ -1,10 +1,15 @@
 package com.shiguiwu.admin.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.shiguiwu.admin.util.TreeUtils;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.shiguiwu.admin.entity.SysPermission;
 import com.shiguiwu.admin.mapper.SysPermissionMapper;
 import com.shiguiwu.admin.service.SysPermissionService;
+
+import java.util.List;
+
 /**
  * 
  * @description: ${DESC}
@@ -53,6 +58,14 @@ public class SysPermissionServiceImpl implements SysPermissionService{
     @Override
     public int updateByPrimaryKey(SysPermission record) {
         return sysPermissionMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
+    public JSONArray queryPermissTree() {
+        List<SysPermission> all = sysPermissionMapper.findAll();
+        JSONArray array = new JSONArray();
+        TreeUtils.permissionsTree(0, all, array);
+        return array;
     }
 
 }

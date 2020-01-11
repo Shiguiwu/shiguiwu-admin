@@ -1,9 +1,11 @@
 package com.shiguiwu.admin.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.shiguiwu.admin.entity.SysPermission;
 import com.shiguiwu.admin.service.SysPermissionService;
 import com.shiguiwu.admin.util.Results;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,4 +34,14 @@ public class PermissionController {
     public Results<List<SysPermission>> list() {
         return null;
     }
+
+
+    @GetMapping("/tree")
+    @ResponseBody
+    public Results<JSONArray> getPermissionTree() {
+        JSONArray array = sysPermissionService.queryPermissTree();
+        return Results.success(array);
+    }
+
+
 }

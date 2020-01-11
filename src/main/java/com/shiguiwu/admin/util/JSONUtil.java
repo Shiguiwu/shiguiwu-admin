@@ -1,5 +1,7 @@
 package com.shiguiwu.admin.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -42,6 +44,12 @@ public class JSONUtil {
     public static <T> T fromJson(String str, Class<T> type) {
         Gson gson = new Gson();
         return gson.fromJson(str, type);
+    }
+
+
+    public JSONObject jsonObject(Object o) {
+        JSONObject jsonObj = (JSONObject) JSON.toJSON(o);
+        return jsonObj;
     }
 
 

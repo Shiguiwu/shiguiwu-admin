@@ -21,15 +21,10 @@
                 <div class="layui-col-md12">
                     <div class="layui-card">
                         <div class="layui-card-body ">
-                            <form class="layui-form layui-col-space5" id="query-form">
+                            <form class="layui-form layui-col-space5">
+
                                 <div class="layui-inline layui-show-xs-block">
-                                    <input class="layui-input"  autocomplete="off" placeholder="用户生日范围开始日" name="start" id="start">
-                                </div>
-                                <div class="layui-inline layui-show-xs-block">
-                                    <input class="layui-input"  autocomplete="off" placeholder="用户生日范围截止日" name="end" id="end">
-                                </div>
-                                <div class="layui-inline layui-show-xs-block">
-                                    <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                                    <input type="text" name="name"  placeholder="请输入角色名" autocomplete="off" class="layui-input">
                                 </div>
                                 <div class="layui-inline layui-show-xs-block">
                                     <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
@@ -38,61 +33,35 @@
                         </div>
                         <div class="layui-card-header">
                             <button class="layui-btn layui-btn-danger" id="batch-delete-btn"><i class="layui-icon"></i>批量删除</button>
-                            <button class="layui-btn" onclick="xadmin.open('添加用户','/user/add')"><i class="layui-icon"></i>添加</button>
+                            <button class="layui-btn" onclick="xadmin.open('添加角色','/role/add')"><i class="layui-icon"></i>添加</button>
                         </div>
-
                         <div class="layui-card-body ">
-                            <table class="layui-hide" id="table" lay-filter="member"></table>
+                            <table class="layui-table layui-form" id="table" lay-filter="member">
+                            </table>
                         </div>
-
                         <div class="layui-card-body ">
                             <script type="text/html" id="barDemo">
-                                <a class="layui-btn layui-btn-xs" lay-event="edit" permission="sys:user:edit">编辑</a>
-                                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" permission="sys:user:del">删除</a>
+                                <a onclick="member_stop(this,'10001')" href="javascript:;"  title="启用">
+                                    <i class="layui-icon">&#xe601;</i>
+                                </a>
+                                <a title="编辑" lay-event="edit" href="javascript:;">
+                                    <i class="layui-icon">&#xe642;</i>
+                                </a>
+                                <a title="删除" lay-event="del" href="javascript:;">
+                                    <i class="layui-icon">&#xe640;</i>
+                                </a>
                             </script>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div> 
     </body>
     <script>
-      layui.use(['table','laydate','form'], function(){
+      layui.use(['laydate','form','table'], function(){
         var laydate = layui.laydate;
         var form = layui.form;
         var table = layui.table;
-
-
-          //第一个实例
-          table.render({
-              elem: '#table'
-              ,height: 312
-              ,url: '/user/list/' //数据接口
-              ,request: {
-                  pageName: 'pageNum',
-                  limitName: 'pageSize'
-              }
-              // ,where: {pageNum:1 ,pageSize: 20}
-              ,method: 'get'
-              //,cellMinWidth: 40 全局定义常规单元格的最小宽度，layui 2.2.1 新增
-              ,page: true //开启分页
-              ,cols: [
-                  [
-                      {type:'checkbox', fixed:'left'}
-                      ,{field: 'id', title: 'ID',  sort: true,width: 80}
-                      ,{field: 'username', title: '用户名', sort: true,width: 177,align:'center'}
-                      ,{field: 'nickname', title: '昵称',  sort: true, width: 177,align:'center'}
-                      // ,{field: 'phone', title: '电话号码', align:'center'}
-                      ,{field: 'email', title: '电子邮件',width: 177,align:'center'}
-                      ,{field: 'status', title: '状态', width: 80,  sort: true,templet:function (u) {
-                          return u.status === 0 ? '禁用':'启用'
-                      }}
-                      ,{field: 'birthday', title: '生日', width: 177,  sort: true}
-                      ,{fixed: 'right',  align:'center', width: 250,toolbar: '#barDemo'}
-                  ]
-              ]
-          });
         
         //执行一个laydate实例
         laydate.render({
@@ -104,53 +73,32 @@
           elem: '#end' //指定元素
         });
 
+          //第一个实例
+          table.render({
+              elem: '#table'
+              ,height: 312
+              ,url: '/role/list/' //数据接口
+              ,request: {
+                  pageName: 'pageNum',
+                  limitName: 'pageSize'
+              }
+              // ,where: {pageNum:1 ,pageSize: 20}
+              ,method: 'get'
+              ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+              ,page: true //开启分页
+              ,cols: [
+                  [
+                      {type:'checkbox', fixed:'left'}
+                      ,{field: 'id', title: 'ID',  sort: true,width: 120}
+                      ,{field: 'name', title: '角色名称', sort: true,align:'center',width: 150}
+                      ,{field: 'description', title: '角色描述',  sort: true, align:'center',width: 150}
+                      ,{field: 'updateTime', title: '更新时间',  sort: true, align:'center',width: 200}
+                      ,{field: 'createTime', title: '创建时间',  sort: true, align:'center',width: 200}
+                      ,{fixed: 'right',  align:'center', toolbar: '#barDemo',width: 300}
 
-          form.on('submit(sreach)', function(data){
-
-              // var param = data.serialize();
-
-              console.log("param",data);
-
-              table.reload('table', {
-                  url: '/user/list',
-                  request: {
-                      pageName: 'pageNum',
-                      limitName: 'pageSize'
-                  },
-                  method:'get',
-                  where:{
-                      username: data.field.username,
-                      end: data.field.end,
-                      start: data.field.start
-                  },
-                  page: {
-                      curr: 1
-                  }
-
-              });
-              return false;
+                  ]
+              ]
           });
-
-
-
-          // $('#query-form').on('click',function () {
-          //     var queryPo = page.formToJson($('#query_form').serialize());
-          //     var table = layui.table;
-          //     table.reload('data_grid', {
-          //         url: '/getUserList.action',
-          //         page:{
-          //             curr:1  //从第一页开始
-          //         },
-          //
-          //         method:'get',
-          //         where:{
-          //             queryStr:queryPo
-          //         }
-          //
-          //     });
-          // });
-
-
 
           //监听工具条
           table.on('tool(member)', function(obj){
@@ -158,7 +106,7 @@
               if(obj.event === 'del'){
                   layer.confirm('真的删除行么', function(index){
                       $.ajax({
-                          url:"/user/delete/"+data.id,
+                          url:"/role/delete/"+data.id,
                           type:"DELETE",
                           dataType:'json',
                           headers:{'Content-Type':'application/json;charset=utf8'},
@@ -179,7 +127,7 @@
                   });
 
               } else if(obj.event === 'edit'){
-                  xadmin.open('编辑用户信息','/user/edit/?id='+data.id);
+                  xadmin.open('编辑用户信息','/role/edit/?id='+data.id);
               }
           });
 
@@ -210,7 +158,7 @@
                   // }
                   $.ajax({
                       type:'delete',
-                      url:'/user/batDelete?ids='+ids,
+                      url:'/role/batDelete?ids='+ids,
                       success:function(data){
                           if(data.code==200){
                               table.reload('table')
@@ -223,41 +171,36 @@
                       }
                   });
               })
-          });               
+          });
+
+          form.on('submit(sreach)', function(data){
+              table.reload('table', {
+                  url: '/role/list',
+                  request: {
+                      pageName: 'pageNum',
+                      limitName: 'pageSize'
+                  },
+                  method:'get',
+                  where:{
+                      name: data.field.name,
+
+                  },
+                  page: {
+                      curr: 1
+                  }
+
+              });
+              return false;
+          });
+
+
+
 
 
 
 
 
       });
-
-      /*用户-删除*/
-      function member_del(obj,id){
-          layer.confirm('确认要删除吗？',function(index){
-              //发异步删除数据
-              $.ajax({
-                  type: 'delete',
-                  url: '/user/delete/'+id,
-                  dataType:'json',
-                  success: function (result) {
-                      if (result.code == 200) {
-                          $(obj).parents("tr").remove();
-                          layer.msg(result.msg,{icon:1,time:1000});
-
-                      }
-                      else {
-                          layer.msg(result.msg,{icon:1,time:1000})
-                      }
-                  }
-              })
-
-          });
-      }
-      
-      function del(table) {
-          var check = table.checkStatus('table')
-          console.log(check)
-      }
 
        /*用户-停用*/
       function member_stop(obj,id){
@@ -283,21 +226,32 @@
           });
       }
 
-
-
+      /*用户-删除*/
+      function member_del(obj,id){
+          layer.confirm('确认要删除吗？',function(index){
+              //发异步删除数据
+              $(obj).parents("tr").remove();
+              layer.msg('已删除!',{icon:1,time:1000});
+          });
+      }
 
 
 
       function delAll (argument) {
 
-        var data = argument.getData();
-          console.log(data);
-
-          layer.confirm('确认要删除吗？'+data,function(index){
+        var data = tableCheck.getData();
+  
+        layer.confirm('确认要删除吗？'+data,function(index){
             //捉到所有被选中的，发异步进行删除
             layer.msg('删除成功', {icon: 1});
             $(".layui-form-checked").not('.header').parents('tr').remove();
         });
       }
     </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
 </html>

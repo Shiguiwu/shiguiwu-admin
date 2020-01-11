@@ -2,6 +2,8 @@ package com.shiguiwu.admin.mapper;
 
 import com.shiguiwu.admin.entity.SysPermission;
 
+import java.util.List;
+
 /**
  * 
  * @description: ${DESC}
@@ -28,4 +30,6 @@ public interface SysPermissionMapper {
     int updateByPrimaryKeySelective(SysPermission record);
 
     int updateByPrimaryKey(SysPermission record);
+
+    List<SysPermission> findAll();
 }

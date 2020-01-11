@@ -37,4 +37,14 @@ public interface SysRoleService {
     List<SysRole> getAllRole();
 
     List<SysRole> findAll(RoleDto roleDto);
+
+    int addRole(RoleDto dto);
+
+    int editRole(RoleDto dto);
+
+    RoleDto queryRoleAndPermissionIds(Integer id);
+
+    int delete(Integer id);
+
+    int batDelete(String ids);
 }

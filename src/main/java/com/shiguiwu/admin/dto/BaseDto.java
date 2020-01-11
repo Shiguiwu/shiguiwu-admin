@@ -22,6 +22,10 @@ public class BaseDto<T> implements Serializable {
 
     private T id;
 
+    private String end;
+
+    private String start;
+
 
 
 

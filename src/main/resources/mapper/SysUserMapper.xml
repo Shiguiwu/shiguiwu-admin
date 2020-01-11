@@ -206,13 +206,29 @@
         select * from sys_user where 1=1
 
         <if test="  username != null and username != ''">
-            and username = #{username,jdbcType=VARCHAR}
+            and username  like concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
+
+        <if test="end != null and end != ''">
+            AND date_format(birthday,'%Y-%m-%d') <![CDATA[<=]]> #{end,jdbcType=VARCHAR}
+        </if>
+
+        <if test="start != null and start != ''">
+            AND date_format(birthday,'%Y-%m-%d') <![CDATA[>=]]> #{start,jdbcType=VARCHAR}
+        </if>
+
+
     </select>
 
     <select id="queryDto" parameterType="long" resultType="com.shiguiwu.admin.dto.UserDto" >
         select su.*,(select group_concat(roleId) from sys_role_user where userid=su.id group by userid ) as roleId from sys_user su where su.id = #{id}
     </select>
 
+    <delete id="batDeleteUserByUserid" parameterType="list" >
+        delete from sys_user where 1=1 and id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")" >
+            #{item,jdbcType=BIGINT}
+        </foreach>
+    </delete>
 
 </mapper>

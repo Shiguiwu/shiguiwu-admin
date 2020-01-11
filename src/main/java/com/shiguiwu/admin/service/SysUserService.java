@@ -43,4 +43,8 @@ public interface SysUserService{
     UserDto queryDto(Long id);
 
     int updateUserInfo(UserDto dto);
+
+    int deleteUser(Long id);
+
+    int batDeleteUser(String ids);
 }

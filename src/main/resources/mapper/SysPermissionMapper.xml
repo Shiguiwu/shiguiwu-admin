@@ -128,4 +128,8 @@
       sort = #{sort,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="findAll" resultMap="BaseResultMap" >
+    select * from sys_permission order by sort
+  </select>
 </mapper>

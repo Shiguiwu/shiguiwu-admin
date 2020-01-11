@@ -1,0 +1,1 @@
+2020-01-10 17:39:04.857 [Thread-20] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'

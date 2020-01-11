@@ -38,4 +38,22 @@
       </if>
     </trim>
   </insert>
+
+  <insert id="batchAdd" parameterType="list">
+    insert into sys_role_permission (roleId, permissionId) values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.roleid,jdbcType=INTEGER},#{item.permissionid,jdbcType=INTEGER})
+    </foreach>
+  </insert>
+
+  <delete id="deleteByRoleId" parameterType="integer" >
+    delete from sys_role_permission where roleId = #{roleId,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="batchDelete" parameterType="list" >
+    delete  from sys_role_permission where roleId in
+    <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+      #{item,jdbcType=INTEGER}
+    </foreach>
+  </delete>
 </mapper>

@@ -28,10 +28,8 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.shiguiwu.admin.entity.SysRole" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into sys_role (`name`, description, createTime, 
-      updateTime)
-    values (#{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into sys_role (`name`, description, createTime, updateTime)
+    values (#{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, now(), now())
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.shiguiwu.admin.entity.SysRole" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -101,7 +99,18 @@
   <select id="findAll" parameterType="com.shiguiwu.admin.dto.RoleDto" resultMap="BaseResultMap" >
     select <include refid="Base_Column_List" /> from sys_role where 1=1
     <if test="name != null and name != ''" >
-      and name=#{name,jdbcType=VARCHAR}
+      and name like concat('%',#{name,jdbcType=VARCHAR},'%')
     </if>
   </select>
+
+  <select id="queryRoleAndPermissionIdsById" parameterType="integer" resultType="com.shiguiwu.admin.dto.RoleDto">
+    select r.*,(select group_concat(sr.permissionId) from sys_role_permission sr where sr.roleId=r.id group by sr.roleId) as permissionIds from sys_role r where r.id= #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="batDelete" parameterType="list" >
+    delete from sys_role where id in
+    <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+      #{item,jdbcType=INTEGER}
+    </foreach>
+  </delete>
 </mapper>

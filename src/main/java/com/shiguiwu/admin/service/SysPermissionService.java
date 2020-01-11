@@ -1,5 +1,6 @@
 package com.shiguiwu.admin.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.shiguiwu.admin.entity.SysPermission;
     /**
  * 
@@ -30,4 +31,5 @@ public interface SysPermissionService{
 
     int updateByPrimaryKey(SysPermission record);
 
+    JSONArray queryPermissTree();
 }

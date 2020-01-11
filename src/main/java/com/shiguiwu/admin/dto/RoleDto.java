@@ -12,9 +12,13 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class RoleDto extends BaseDto {
+public class RoleDto extends BaseDto<Integer> {
 
     private static final long serialVersionUID = -6399431397333922250L;
 
     private  String name;
+
+    private String description;
+
+    private String permissionIds;
 }

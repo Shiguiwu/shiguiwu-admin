@@ -2,6 +2,7 @@ package com.shiguiwu.admin.mapper;
 
 import com.shiguiwu.admin.dto.RoleDto;
 import com.shiguiwu.admin.entity.SysRole;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -35,4 +36,8 @@ public interface SysRoleMapper {
     List<SysRole> queryAllRole();
 
     List<SysRole> findAll(RoleDto roleDto);
+
+    RoleDto queryRoleAndPermissionIdsById(Integer id);
+
+    int batDelete(@Param("list") List<Integer> integers);
 }

@@ -43,4 +43,11 @@
 
        delete from sys_role_user  where userid = #{userId}
     </delete>
+
+    <delete id="batDeleteUserRoleByUserid" parameterType="list" >
+        delete from sys_role_user where 1=1 and userid in
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+             #{item,jdbcType=BIGINT}
+        </foreach>
+    </delete>
 </mapper>

@@ -9,6 +9,7 @@
 
 <body>
 <div class="x-body">
+    <input type="hidden" id="sex" name="sex" th:value="${sysUser.sex}">
     <form class="layui-form">
         <!--/*@thymesVar id="sysUser" type=""*/-->
         <input type="hidden" id="userId" name="id" th:value="${sysUser.id}">
@@ -77,8 +78,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">性别</label>
             <div class="layui-input-block">
-                <input type="radio" th:value="${sysUser.sex}" name="sex" value="1" title="男">
-                <input type="radio" th:value="${sysUser.sex}" name="sex" value="0" title="女" >
+                <input type="radio"  name="sex" lay-filter="sex" value="1" title="男" checked="">
+                <input type="radio"  name="sex" lay-filter="sex" value="0" title="女">
             </div>
         </div>
         <!--    性别end   -->
@@ -106,7 +107,7 @@
             ,layer = layui.layer
             ,laydate = layui.laydate;
         getAllRole(function(){
-           var sex =  $("input[name=sex][title='男']");
+           var sex =  $("#sex");
            if(sex.val() == 0) {
                $("input[name=sex][title='女']").attr("checked","checked");
            }else {
@@ -121,6 +122,11 @@
             elem: '#L_birthday'
             ,format: 'yyyy-MM-dd' //可任意组合
         });
+
+        form.on('radio(sex)',function (data) {
+            console.log(data);
+        });
+
 
         //自定义验证规则
         form.verify({
@@ -144,7 +150,11 @@
                 layer.alert("请给该用户设置角色");
                 return false;
             }
-            data.field.roleId = rolelRadio.val();
+            // data.field.roleId = rolelRadio.val();
+            // data.field.sex = $("[name=sex]:checked").val();
+
+            console.log('sex===============',JSON.stringify(data.field))
+            return false
             $.ajax({
                 url:"/user/edit",
                 type:"PUT",

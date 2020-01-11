@@ -5,6 +5,7 @@ import com.shiguiwu.admin.entity.SysRoleUser;
 import com.shiguiwu.admin.mapper.SysRoleUserMapper;
 import com.shiguiwu.admin.util.BeanUtil;
 import com.shiguiwu.admin.util.DateUtils;
+import org.apache.ibatis.javassist.runtime.DotClass;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.shiguiwu.admin.entity.SysUser;
@@ -12,10 +13,15 @@ import com.shiguiwu.admin.mapper.SysUserMapper;
 import com.shiguiwu.admin.service.SysUserService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.thymeleaf.expression.Ids;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -105,9 +111,11 @@ public class SysUserServiceImpl implements SysUserService{
     @Override
     @Transactional
     public int updateUserInfo(UserDto dto) {
+
         SysUser sysUser = new SysUser();
         BeanUtil.copyPropertiesIgnoreNull(dto, sysUser);
         sysUser.setUpdateTime(new Date());
+        sysUser.setId(dto.getId());
         //删除原有的角色
         sysRoleUserMapper.deleteByUserId(dto.getId());
 
@@ -117,6 +125,27 @@ public class SysUserServiceImpl implements SysUserService{
         roleUser.setUserid(sysUser.getId());
         sysRoleUserMapper.insert(roleUser);
         return sysUserMapper.updateByPrimaryKeySelective(sysUser);
+    }
+
+    @Override
+    public int deleteUser(Long id) {
+
+        //删除中间表
+        sysRoleUserMapper.deleteByUserId(id);
+
+        //删除用户
+        int result = sysUserMapper.deleteByPrimaryKey(id);
+
+        return result;
+    }
+
+    @Override
+    public int batDeleteUser(String ids) {
+        List<Long> userids = Arrays.asList(ids.split(","))
+                .parallelStream().map(Long::parseLong)
+                .collect(Collectors.toList());
+        sysRoleUserMapper.batDeleteUserRoleByUserid(userids);
+        return sysUserMapper.batDeleteUserByUserid(userids);
     }
 
 }

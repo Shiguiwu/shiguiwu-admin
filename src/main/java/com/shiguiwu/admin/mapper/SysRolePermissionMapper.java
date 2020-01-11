@@ -3,6 +3,8 @@ package com.shiguiwu.admin.mapper;
 import com.shiguiwu.admin.entity.SysRolePermission;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 
  * @description: ${DESC}
@@ -23,4 +25,10 @@ public interface SysRolePermissionMapper {
     int insert(SysRolePermission record);
 
     int insertSelective(SysRolePermission record);
+
+    void batchAdd(List<SysRolePermission> permissionIds);
+
+    void deleteByRoleId(@Param("roleId") Integer roleId);
+
+    void batchDelete(@Param("list") List<Integer> integers);
 }

@@ -3,6 +3,8 @@ package com.shiguiwu.admin.mapper;
 import com.shiguiwu.admin.entity.SysRoleUser;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 
  * @description: ${DESC}
@@ -25,4 +27,6 @@ public interface SysRoleUserMapper {
     int insertSelective(SysRoleUser record);
 
     void deleteByUserId(@Param("userId") Long userId);
+
+    void batDeleteUserRoleByUserid(@Param("list") List<Long> userids);
 }
