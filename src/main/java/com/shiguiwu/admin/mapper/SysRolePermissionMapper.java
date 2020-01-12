@@ -31,4 +31,6 @@ public interface SysRolePermissionMapper {
     void deleteByRoleId(@Param("roleId") Integer roleId);
 
     void batchDelete(@Param("list") List<Integer> integers);
+
+    void deleteByPermissionId(@Param("permissionId") Integer permissionId);
 }

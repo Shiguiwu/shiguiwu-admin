@@ -47,4 +47,6 @@ public interface SysUserService{
     int deleteUser(Long id);
 
     int batDeleteUser(String ids);
+
+    SysUser getByUsername(String username);
 }

@@ -37,7 +37,7 @@ public class SysPermission  extends BaseEntity<Integer>{
 
     private String href;
 
-    private Boolean type;
+    private Byte type;
 
     private String permission;
 

@@ -1,6 +1,7 @@
 package com.shiguiwu.admin.mapper;
 
 import com.shiguiwu.admin.entity.SysPermission;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -32,4 +33,8 @@ public interface SysPermissionMapper {
     int updateByPrimaryKey(SysPermission record);
 
     List<SysPermission> findAll();
+
+    Integer queryByParentId(@Param("id") Integer id);
+
+    List<SysPermission> queryPermissionByUserId(@Param("userId") Long id);
 }

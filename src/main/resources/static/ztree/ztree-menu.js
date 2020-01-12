@@ -8,7 +8,7 @@ function onlyGetMenuTree() {
 
     $.ajax({
         type : 'get',
-        url : '/permission/listAllPermission',
+        url : '/permiss/tree',
         contentType : "application/json; charset=utf-8",
         async : false,
         success : function(ret) {

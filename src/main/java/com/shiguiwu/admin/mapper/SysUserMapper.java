@@ -40,4 +40,6 @@ public interface SysUserMapper {
     UserDto queryDto(@Param("id") Long id);
 
     int batDeleteUserByUserid(@Param("list") List<Long> userids);
+
+    SysUser getByUsername(String username);
 }

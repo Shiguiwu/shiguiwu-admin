@@ -231,4 +231,8 @@
         </foreach>
     </delete>
 
+    <select id="getByUsername" resultMap="BaseResultMap" parameterType="string">
+        select * from sys_user where username= #{username,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

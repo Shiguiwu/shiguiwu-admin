@@ -1,14 +1,19 @@
 package com.shiguiwu.admin.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.github.pagehelper.PageInfo;
+import com.shiguiwu.admin.entity.SysRolePermission;
+import com.shiguiwu.admin.mapper.SysRolePermissionMapper;
 import com.shiguiwu.admin.util.TreeUtils;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.shiguiwu.admin.entity.SysPermission;
 import com.shiguiwu.admin.mapper.SysPermissionMapper;
 import com.shiguiwu.admin.service.SysPermissionService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -29,6 +34,9 @@ public class SysPermissionServiceImpl implements SysPermissionService{
 
     @Resource
     private SysPermissionMapper sysPermissionMapper;
+
+    @Resource
+    private SysRolePermissionMapper sysRolePermissionMapper;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -65,6 +73,49 @@ public class SysPermissionServiceImpl implements SysPermissionService{
         List<SysPermission> all = sysPermissionMapper.findAll();
         JSONArray array = new JSONArray();
         TreeUtils.permissionsTree(0, all, array);
+        return array;
+    }
+
+    @Override
+    public List<SysPermission> findAll() {
+        return sysPermissionMapper.findAll();
+    }
+
+    @Override
+    public int addAOrEditPermission(SysPermission sysPermission) {
+        int result;
+        if (null == sysPermission.getId()) {
+            result = sysPermissionMapper.insertSelective(sysPermission);
+        }
+        else {
+            result = sysPermissionMapper.updateByPrimaryKeySelective(sysPermission);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public int delete(Integer id) {
+        int result;
+        //下级权限有的话，不允许删除的
+        Integer integer = sysPermissionMapper.queryByParentId(id);
+        if (integer.intValue() != 0) {
+            result = 0;
+            return result;
+        }
+        sysRolePermissionMapper.deleteByPermissionId(id);
+        result = sysPermissionMapper.deleteByPrimaryKey(id);
+        return result;
+    }
+
+    @Override
+    public JSONArray getMuenByUserId(Long userid) {
+        JSONArray array = new JSONArray();
+        List<SysPermission> list = sysPermissionMapper.queryPermissionByUserId(userid)
+                .stream()
+                .filter(p-> new Integer(1).equals(p.getType()))
+                .collect(Collectors.toList());
+        TreeUtils.permissionsTree(0, list, array);
         return array;
     }
 

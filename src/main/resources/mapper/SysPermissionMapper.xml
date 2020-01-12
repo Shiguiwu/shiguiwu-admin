@@ -9,7 +9,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="css" jdbcType="VARCHAR" property="css" />
     <result column="href" jdbcType="VARCHAR" property="href" />
-    <result column="type" jdbcType="BOOLEAN" property="type" />
+    <result column="type" jdbcType="TINYINT" property="type" />
     <result column="permission" jdbcType="VARCHAR" property="permission" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
@@ -35,7 +35,7 @@
       href, `type`, permission, 
       sort)
     values (#{parentid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{css,jdbcType=VARCHAR}, 
-      #{href,jdbcType=VARCHAR}, #{type,jdbcType=BOOLEAN}, #{permission,jdbcType=VARCHAR}, 
+      #{href,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{permission,jdbcType=VARCHAR},
       #{sort,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.shiguiwu.admin.entity.SysPermission" useGeneratedKeys="true">
@@ -78,7 +78,7 @@
         #{href,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
-        #{type,jdbcType=BOOLEAN},
+        #{type,jdbcType=TINYINT},
       </if>
       <if test="permission != null">
         #{permission,jdbcType=VARCHAR},
@@ -105,7 +105,7 @@
         href = #{href,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
-        `type` = #{type,jdbcType=BOOLEAN},
+        `type` = #{type,jdbcType=TINYINT},
       </if>
       <if test="permission != null">
         permission = #{permission,jdbcType=VARCHAR},
@@ -123,7 +123,7 @@
       `name` = #{name,jdbcType=VARCHAR},
       css = #{css,jdbcType=VARCHAR},
       href = #{href,jdbcType=VARCHAR},
-      `type` = #{type,jdbcType=BOOLEAN},
+      `type` = #{type,jdbcType=TINYINT},
       permission = #{permission,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
@@ -131,5 +131,17 @@
 
   <select id="findAll" resultMap="BaseResultMap" >
     select * from sys_permission order by sort
+  </select>
+
+  <select id="queryByParentId" parameterType="integer" resultType="integer" >
+    select count(1) from sys_permission where parentId =#{id,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="queryPermissionByUserId" parameterType="long" resultMap="BaseResultMap">
+    select distinct sp.* from sys_role_permission srp
+    inner join sys_role_user sru on sru.roleid=srp.roleid
+    left join sys_permission sp on srp.permissionId=sp.id
+    where sru.userid=#{userId,jdbcType=DECIMAL}
   </select>
 </mapper>

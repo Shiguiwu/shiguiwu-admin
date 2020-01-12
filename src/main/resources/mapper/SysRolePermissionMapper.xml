@@ -50,10 +50,17 @@
     delete from sys_role_permission where roleId = #{roleId,jdbcType=INTEGER}
   </delete>
 
+
+  <delete id="deleteByPermissionId" parameterType="integer" >
+    delete from sys_role_permission where permissionId = #{permissionId,jdbcType=INTEGER}
+  </delete>
+
   <delete id="batchDelete" parameterType="list" >
     delete  from sys_role_permission where roleId in
     <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
       #{item,jdbcType=INTEGER}
     </foreach>
   </delete>
+
+
 </mapper>

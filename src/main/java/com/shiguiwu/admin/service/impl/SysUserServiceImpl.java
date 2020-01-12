@@ -6,6 +6,8 @@ import com.shiguiwu.admin.mapper.SysRoleUserMapper;
 import com.shiguiwu.admin.util.BeanUtil;
 import com.shiguiwu.admin.util.DateUtils;
 import org.apache.ibatis.javassist.runtime.DotClass;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.shiguiwu.admin.entity.SysUser;
@@ -45,6 +47,9 @@ public class SysUserServiceImpl implements SysUserService{
 
     @Resource
     private SysRoleUserMapper sysRoleUserMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public int deleteByPrimaryKey(Long id) {
@@ -94,7 +99,7 @@ public class SysUserServiceImpl implements SysUserService{
         SysUser sysUser = new SysUser();
         BeanUtil.copyPropertiesIgnoreNull(dto, sysUser);
         sysUser.setStatus((byte) 1);
-
+        sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
         int result = sysUserMapper.insert(sysUser);
         SysRoleUser roleUser = new SysRoleUser();
         roleUser.setRoleid(Integer.parseInt(dto.getRoleId()));
@@ -146,6 +151,11 @@ public class SysUserServiceImpl implements SysUserService{
                 .collect(Collectors.toList());
         sysRoleUserMapper.batDeleteUserRoleByUserid(userids);
         return sysUserMapper.batDeleteUserByUserid(userids);
+    }
+
+    @Override
+    public SysUser getByUsername(String username) {
+        return sysUserMapper.getByUsername(username);
     }
 
 }
