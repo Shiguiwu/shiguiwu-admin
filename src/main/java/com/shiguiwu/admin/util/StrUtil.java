@@ -1,7 +1,12 @@
 package com.shiguiwu.admin.util;
 
 import com.google.common.collect.Lists;
+import com.spire.pdf.PdfDocument;
+import com.spire.pdf.PdfPageBase;
+import com.spire.pdf.general.find.PdfTextFind;
+import com.spire.pdf.widget.PdfPageCollection;
 
+import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
@@ -71,5 +76,8 @@ public class StrUtil {
 
 		return map;
 	}
+
+
+
 
 }

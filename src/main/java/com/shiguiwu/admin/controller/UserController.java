@@ -6,6 +6,7 @@ import com.shiguiwu.admin.dto.UserDto;
 import com.shiguiwu.admin.entity.SysUser;
 import com.shiguiwu.admin.service.SysUserService;
 import com.shiguiwu.admin.util.Results;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 @Slf4j
+@Api("用户管理接口")
 public class UserController {
 
 

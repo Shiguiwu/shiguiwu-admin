@@ -4,12 +4,15 @@ import java.awt.*;
 import java.security.Permission;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.alibaba.fastjson.JSONArray;
 import com.google.common.collect.Lists;
 import com.shiguiwu.admin.entity.SysPermission;
 import com.shiguiwu.admin.entity.SysUser;
 import com.shiguiwu.admin.mapper.SysUserMapper;
+import com.shiguiwu.admin.util.FileUtil;
 import com.shiguiwu.admin.util.JSONUtil;
 import com.shiguiwu.admin.util.TreeUtils;
 import com.spire.pdf.PdfDocument;
@@ -50,34 +53,7 @@ public class DemoApplicationTests {
     @Test
     public void queryOne() throws Exception{
 
-        //加载PDF文档
-        PdfDocument pdf = new PdfDocument();
-        pdf.loadFromFile("C:\\Users\\shiguiwu\\Desktop\\python-已转档.pdf");
-        PdfTextFind[] result = null;
 
-        PdfPageCollection pdfPageCollection =  pdf.getPages();
-
-        //遍历文档页面
-        for (int i =0; i<pdf.getPages().getCount();i++) {
-            PdfPageBase page = pdfPageCollection.get(i);
-            //查找文档中所有的"乡愁"字符串
-            result = page.findText("python",false,true).getFinds();
-
-            for (PdfTextFind find : result) {
-                //高亮显示查找结果
-                find.applyHighLight(Color.yellow);
-            }
-        }
-        //保存文档
-
-        PdfPageBase add = pdf.getPages().add();
-        pdf.getPages().remove(add);
-        pdf.saveToFile("C:\\Users\\shiguiwu\\Desktop\\python-已转档1.pdf");
-        pdf.close();
-
-//        SysUser sysUser = sysUserMapper.selectByPrimaryKey(45L);
-//
-//        System.out.println(sysUser.getId());
     }
 
     @Test
@@ -112,6 +88,99 @@ public class DemoApplicationTests {
     @Test
     public void test0(){
         System.out.println(new Integer(0).equals(0));
+
+    }
+
+
+    @Test
+    public  void test1() throws Exception {
+
+        //加载PDF文档
+        PdfDocument pdf = new PdfDocument();
+        pdf.loadFromFile("C:\\Users\\shiguiwu\\Desktop\\python-已转档.pdf");
+        PdfTextFind[] result = null;
+
+        PdfPageCollection pdfPageCollection =  pdf.getPages();
+
+        long startTime = System.nanoTime();
+
+        System.out.println("开始时间:"+startTime);
+        //遍历文档页面
+        for (int i =0; i<pdf.getPages().getCount();i++) {
+
+            PdfPageBase page = pdfPageCollection.get(i);
+            //查找文档中所有的"乡愁"字符串
+            result = page.findText("python",false,true).getFinds();
+
+            for (PdfTextFind find : result) {
+                //高亮显示查找结果
+                find.applyHighLight(Color.yellow);
+            }
+        }
+        //保存文档
+
+        PdfPageBase add = pdf.getPages().add();
+        pdf.getPages().remove(add);
+        pdf.saveToFile("C:\\Users\\shiguiwu\\Desktop\\python-已转档4.pdf");
+
+        String base = FileUtil.encodeBase64File("C:\\Users\\shiguiwu\\Desktop\\python-已转档4.pdf");//转base64需要
+
+        System.out.println("用使用时间:"+(System.nanoTime()  - startTime)/ 1_000_000);
+        pdf.close();
+
+//        SysUser sysUser = sysUserMapper.selectByPrimaryKey(45L);
+//
+//        System.out.println(sysUser.getId());
+    }
+
+
+
+    @Test
+    public  void test2() throws Exception {
+
+
+        //加载PDF文档
+        PdfDocument pdf = new PdfDocument();
+        pdf.loadFromFile("C:\\Users\\shiguiwu\\Desktop\\python-已转档.pdf");
+
+        long startTime = System.nanoTime();
+        ExecutorService service = Executors.newCachedThreadPool();
+        PdfPageCollection pdfPageCollection =  pdf.getPages();
+
+        System.out.println("开始时间:"+startTime);
+        //遍历文档页面
+        for (int i =0; i<pdf.getPages().getCount();i++) {
+
+
+
+                PdfPageBase page = pdfPageCollection.get(i);
+                //查找文档中所有的"乡愁"字符串
+                PdfTextFind[] result = page.findText("python",false,true).getFinds();
+
+                for (PdfTextFind find : result) {
+                    //高亮显示查找结果
+                    try {
+                        find.applyHighLight(Color.yellow);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+
+
+        }
+        //保存文档
+
+        PdfPageBase add = pdf.getPages().add();
+        pdf.getPages().remove(add);
+        pdf.saveToFile("C:\\Users\\shiguiwu\\Desktop\\python-已转档4.pdf");
+
+        String base = FileUtil.encodeBase64File("C:\\Users\\shiguiwu\\Desktop\\python-已转档4.pdf");//转base64需要
+
+        System.out.println("用使用时间:"+(System.nanoTime()  - startTime)/ 1_000_000);
+        pdf.close();
+
 
     }
 

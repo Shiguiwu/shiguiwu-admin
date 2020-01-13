@@ -2,6 +2,7 @@ package com.shiguiwu.admin.util;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -143,5 +144,36 @@ public class FileUtil {
 		}
 
 		return null;
+	}
+
+
+	/**
+	 * <p>将文件转成base64 字符串</p>
+	 * @param path 文件路径
+	 * @return
+	 * @throws Exception
+	 */
+	public static String encodeBase64File(String path) throws Exception {
+		File file = new File(path);
+		FileInputStream inputFile = new FileInputStream(file);
+		byte[] buffer = new byte[(int)file.length()];
+		inputFile.read(buffer);
+		inputFile.close();
+		return new BASE64Encoder().encode(buffer);
+	}
+
+
+	/**
+	 * <p>将文件转成base64 字符串</p>
+	 * @param path 文件路径
+	 * @return
+	 * @throws Exception
+	 */
+	public static String encodeBase64File(File file) throws Exception {
+		FileInputStream inputFile = new FileInputStream(file);
+		byte[] buffer = new byte[(int)file.length()];
+		inputFile.read(buffer);
+		inputFile.close();
+		return new BASE64Encoder().encode(buffer);
 	}
 }
