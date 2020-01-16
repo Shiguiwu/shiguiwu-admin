@@ -1,9 +1,15 @@
 package com.shiguiwu.admin;
 
 import java.awt.*;
-import java.security.Permission;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,10 +25,12 @@ import com.spire.pdf.PdfDocument;
 import com.spire.pdf.PdfPageBase;
 import com.spire.pdf.general.find.PdfTextFind;
 import com.spire.pdf.widget.PdfPageCollection;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -97,7 +105,7 @@ public class DemoApplicationTests {
 
         //加载PDF文档
         PdfDocument pdf = new PdfDocument();
-        pdf.loadFromFile("C:\\Users\\shiguiwu\\Desktop\\python-已转档.pdf");
+        pdf.loadFromFile("C:\\Users\\shiguiwu\\Desktop\\XJLtest002行政村自行车产品发行.pdf");
         PdfTextFind[] result = null;
 
         PdfPageCollection pdfPageCollection =  pdf.getPages();
@@ -110,7 +118,7 @@ public class DemoApplicationTests {
 
             PdfPageBase page = pdfPageCollection.get(i);
             //查找文档中所有的"乡愁"字符串
-            result = page.findText("python",false,true).getFinds();
+            result = page.findText("投资者",false,true).getFinds();
 
             for (PdfTextFind find : result) {
                 //高亮显示查找结果
@@ -121,9 +129,9 @@ public class DemoApplicationTests {
 
         PdfPageBase add = pdf.getPages().add();
         pdf.getPages().remove(add);
-        pdf.saveToFile("C:\\Users\\shiguiwu\\Desktop\\python-已转档4.pdf");
+        pdf.saveToFile("C:\\Users\\shiguiwu\\Desktop\\XJLtest002行政村自行车产品发行1.pdf");
 
-        String base = FileUtil.encodeBase64File("C:\\Users\\shiguiwu\\Desktop\\python-已转档4.pdf");//转base64需要
+        String base = FileUtil.encodeBase64File("C:\\Users\\shiguiwu\\Desktop\\XJLtest002行政村自行车产品发行1.pdf");//转base64需要
 
         System.out.println("用使用时间:"+(System.nanoTime()  - startTime)/ 1_000_000);
         pdf.close();
@@ -141,7 +149,7 @@ public class DemoApplicationTests {
 
         //加载PDF文档
         PdfDocument pdf = new PdfDocument();
-        pdf.loadFromFile("C:\\Users\\shiguiwu\\Desktop\\python-已转档.pdf");
+        pdf.loadFromFile("C:\\Users\\shiguiwu\\Desktop\\XJLtest002行政村自行车产品发行.pdf");
 
         long startTime = System.nanoTime();
         ExecutorService service = Executors.newCachedThreadPool();
@@ -155,7 +163,7 @@ public class DemoApplicationTests {
 
                 PdfPageBase page = pdfPageCollection.get(i);
                 //查找文档中所有的"乡愁"字符串
-                PdfTextFind[] result = page.findText("python",false,true).getFinds();
+                PdfTextFind[] result = page.findText("投资者",false,true).getFinds();
 
                 for (PdfTextFind find : result) {
                     //高亮显示查找结果
@@ -174,12 +182,65 @@ public class DemoApplicationTests {
 
         PdfPageBase add = pdf.getPages().add();
         pdf.getPages().remove(add);
-        pdf.saveToFile("C:\\Users\\shiguiwu\\Desktop\\python-已转档4.pdf");
+        pdf.saveToFile("C:\\Users\\shiguiwu\\Desktop\\XJLtest002行政村自行车产品发行1.pdf");
 
-        String base = FileUtil.encodeBase64File("C:\\Users\\shiguiwu\\Desktop\\python-已转档4.pdf");//转base64需要
+        String base = FileUtil.encodeBase64File("C:\\Users\\shiguiwu\\Desktop\\XJLtest002行政村自行车产品发行1.pdf");//转base64需要
 
+        pdf(base);
         System.out.println("用使用时间:"+(System.nanoTime()  - startTime)/ 1_000_000);
         pdf.close();
+
+    }
+    public void pdf(String string) {
+        BufferedInputStream bis = null;
+        FileOutputStream fos = null;
+        BufferedOutputStream bos = null;
+        try{
+            byte[] bytes= Base64.decode(string);
+            ByteArrayInputStream byteArrayInputStream=new ByteArrayInputStream(bytes);
+            bis=new BufferedInputStream(byteArrayInputStream);
+            File file=new File("C:\\Users\\shiguiwu\\Desktop\\XJLtest002行政村自行车产品发行5.pdf");
+            File path=file.getParentFile();
+            if(!path.exists()){
+                path.mkdirs();
+            }
+            fos=new FileOutputStream(file);
+            bos=new BufferedOutputStream(fos);
+
+            byte[] buffer=new byte[1024];
+            int length=bis.read(buffer);
+            while(length!=-1){
+                bos.write(buffer,0,length);
+                length=bis.read(buffer);
+            }
+            bos.flush();
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            try{
+                bis.close();
+                bos.close();
+                fos.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+    @Test
+    public void testBatchUpdate() {
+        CompletableFuture<List<SysUser>> future = new CompletableFuture<>();
+        sysUserMapper.findAll(null).parallelStream().forEach(e -> {
+            e.setPassword(passwordEncoder.encode("123456"));
+            sysUserMapper.updateByPrimaryKeySelective(e);
+
+        });
+
 
 
     }

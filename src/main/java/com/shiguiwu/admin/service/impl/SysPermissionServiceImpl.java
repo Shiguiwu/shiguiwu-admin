@@ -113,7 +113,7 @@ public class SysPermissionServiceImpl implements SysPermissionService{
         JSONArray array = new JSONArray();
         List<SysPermission> list = sysPermissionMapper.queryPermissionByUserId(userid)
                 .stream()
-                .filter(p-> new Integer(1).equals(p.getType()))
+                .filter(p-> new Byte((byte) 1).equals(p.getType()))
                 .collect(Collectors.toList());
         TreeUtils.permissionsTree(0, list, array);
         return array;

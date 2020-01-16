@@ -1,6 +1,6 @@
 package com.shiguiwu.admin.controller;
 
-import com.shiguiwu.admin.util.StrUtil;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class LoginController {
 
     @GetMapping("/login.html")
-    public String login() throws Exception{
+    public String login() throws Exception {
         return "login";
     }
 
@@ -23,5 +23,15 @@ public class LoginController {
     @GetMapping("/403.html")
     public String noPermission() {
         return "403";
+    }
+
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/index";
+    }
+
+    @GetMapping("/index")
+    public String index() {
+        return "index";
     }
 }

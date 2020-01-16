@@ -38,7 +38,7 @@
             </ul>
             <ul class="layui-nav right" lay-filter="">
                 <li class="layui-nav-item">
-                    <a href="javascript:;">admin</a>
+                    <a href="javascript:;" id="show-nickName">admin</a>
                     <dl class="layui-nav-child">
                         <!-- 二级菜单 -->
                         <dd>
@@ -98,12 +98,12 @@
 
             function Menu(eleId, userId) {
                 this.eleId = eleId || "nav";
-                this.userId = userId || "0";
+                this.userId = userId || "1";
                 this.permission = [];
                 this.menuItemRight = '<i class="iconfont nav_right">&#xe697;</i>';
                 this.menuItemTemplate = ""
                     +'<li>'
-                    + '<a onclick="xadmin.add_tab(\'{{menu_title}} \',\' {{menu_href}} \')">'
+                    + '<a onclick="xadmin.add_tab(\'{{menu_title}} \',\' {{menu_href}} \',true)">'
                     + '		<i class="iconfont">{{men_icon}}</i>'
                     + '		<cite>{{menu_name}}</cite>'
                     + '		{{menu_right}}'
@@ -113,7 +113,7 @@
                 this.menuParentTemplate = ""
                     +'<li>'
                     + '<a >'
-                    + '		<i class="iconfont">{{men_icon}}</i>'
+                    + '		<i class="iconfont nav_right">{{men_icon}}</i>'
                     + '		<cite>{{menu_name}}</cite>'
                     + '		{{menu_right}}'
                     + '	</a>'
@@ -214,7 +214,7 @@
 
             }
             var userId = localStorage.userId;
-            var menu = new Menu("",1 );
+            var menu = new Menu("",userId);
             menu.init();
         })
         ;
